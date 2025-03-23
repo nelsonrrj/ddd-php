@@ -23,7 +23,6 @@ class RegisterUserUserCase
   public function execute(RegisterRequestDTO $request): UserResponseDTO
   {
     $user = new UserEntity(
-      id: null,
       email: new UserEmail($request->email),
       name: new UserName($request->name),
       password: new UserPassword($request->password),

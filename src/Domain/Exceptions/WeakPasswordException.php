@@ -2,9 +2,7 @@
 
 namespace App\Domain\Exceptions;
 
-use Exception;
-
-class WeakPasswordException extends Exception
+class WeakPasswordException extends DomainException
 {
   public function __construct()
   {

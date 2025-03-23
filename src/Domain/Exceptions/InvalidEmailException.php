@@ -2,9 +2,7 @@
 
 namespace App\Domain\Exceptions;
 
-use Exception;
-
-class InvalidEmailException extends Exception
+class InvalidEmailException extends DomainException
 {
   public function __construct(string $email, int $code = 422)
   {

@@ -7,6 +7,7 @@ namespace App\Infrastructure\Persistence;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use App\Infrastructure\Exceptions\DatabaseConnectionException;
 use Exception;
 
 class DatabaseConnection
@@ -38,8 +39,8 @@ class DatabaseConnection
 
       $this->entityManager = new EntityManager($connection, $config);
       return $this->entityManager;
-    } catch (\Exception $e) {
-      throw new \Exception("Error creating entity manager: " . $e->getMessage());
+    } catch (Exception $e) {
+      throw new DatabaseConnectionException("Error creating entity manager: " . $e->getMessage());
     }
   }
 

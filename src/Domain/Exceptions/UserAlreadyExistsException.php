@@ -2,9 +2,7 @@
 
 namespace App\Domain\Exceptions;
 
-use Exception;
-
-class UserAlreadyExistsException extends Exception
+class UserAlreadyExistsException extends DomainException
 {
   public function __construct()
   {

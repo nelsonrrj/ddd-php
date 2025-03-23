@@ -13,7 +13,7 @@ use JsonSerializable;
 class UserEntity implements JsonSerializable
 {
   public function __construct(
-    public ?UserId $id,
+    public ?UserId $id = null,
     public UserEmail $email,
     public UserName $name,
     public UserPassword $password,
