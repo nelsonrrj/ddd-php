@@ -2,11 +2,13 @@
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use App\Infrastructure\DI\ContainerFactory;
 use App\Infrastructure\Persistence\DatabaseConnection;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
-$dbConnection = new DatabaseConnection();
+$container = ContainerFactory::getContainer();
+$dbConnection = $container->get(DatabaseConnection::class);
 $entityManager = $dbConnection->getEntityManager();
 
 ConsoleRunner::run(

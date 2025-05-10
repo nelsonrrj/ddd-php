@@ -2,16 +2,18 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use App\Http\Controllers\RegisterUserController;
 use App\Application\UseCases\RegisterUserUserCase;
+use App\Config\EventHandler;
+use App\Http\Controllers\RegisterUserController;
+use App\Infrastructure\DI\ContainerFactory;
+use App\Infrastructure\Events\EventDispatcher;
 use App\Infrastructure\Persistence\DatabaseConnection;
 use App\Infrastructure\Repositories\DoctrineUserRepository;
-use App\Infrastructure\Events\EventDispatcher;
-use App\Config\EventHandler;
 use App\Infrastructure\Exceptions\InfrastructureException;
 
 try {
-  $dbConnection = new DatabaseConnection();
+  $container = ContainerFactory::getContainer();
+  $dbConnection = $container->get(DatabaseConnection::class);
   $entityManager = $dbConnection->getEntityManager();
 
   $eventDispatcher = new EventDispatcher();
@@ -35,13 +37,17 @@ try {
 } catch (DomainException $e) {
   http_response_code($e->getCode());
   echo json_encode(['error' => $e->getMessage()]);
+  exit();
 } catch (InfrastructureException $e) {
   http_response_code(500);
   echo json_encode(['error' => $e->getMessage()]);
+  exit();
 } catch (Exception $e) {
   http_response_code(500);
   echo json_encode(['error' => $e->getMessage()]);
+  exit();
 }
 
 http_response_code(404);
 echo json_encode(['error' => 'Not Found']);
+exit();

@@ -95,3 +95,6 @@ El proyecto incluye un Makefile que facilita diversas tareas comunes. A continua
 - db-connect: Se conecta a la base de datos utilizando el cliente MySQL en el contenedor de la base de datos.
 - logs: Muestra los logs del contenedor de la aplicación.
 - logs-db: Muestra los logs del contenedor de la base de datos.
+
+> [!NOTE]
+> Para ejecutar los comandos del Makefile, se debe estar dentro del directorio del proyecto y ejecutar el comando `make <comando>`.

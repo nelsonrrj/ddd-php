@@ -17,8 +17,9 @@
         }
     ],
     "require": {
-        "doctrine/orm": "^3",
         "doctrine/dbal": "^4",
+        "doctrine/orm": "^3",
+        "php-di/php-di": "^7.0",
         "symfony/cache": "^7"
     },
     "require-dev": {
