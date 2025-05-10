@@ -19,4 +19,6 @@ RUN docker-php-ext-enable xdebug
 WORKDIR /var/www/html
 COPY . .
 
+EXPOSE 9003
+
 CMD ["php", "-a"]
