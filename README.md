@@ -89,7 +89,7 @@ El proyecto incluye un Makefile que facilita diversas tareas comunes. A continua
 - migrate: Ejecuta las migraciones de la base de datos para el entorno de desarrollo.
 - migrate-test: Ejecuta las migraciones de la base de datos para el entorno de testing.
 - db-reset: Reinicia la base de datos (desarrollo y test), eliminando y recreando las bases de datos, y ejecuta las migraciones.
-- install: Instala las dependencias de Composer.
+- install: Instala las dependencias de Composer, crea el archivo .env y ejecuta las migraciones.
 - dump: Actualiza el autoload de Composer con optimizaciones.
 - console: Accede a la consola de comandos dentro del contenedor de la aplicación.
 - db-connect: Se conecta a la base de datos utilizando el cliente MySQL en el contenedor de la base de datos.
@@ -98,3 +98,11 @@ El proyecto incluye un Makefile que facilita diversas tareas comunes. A continua
 
 > [!NOTE]
 > Para ejecutar los comandos del Makefile, se debe estar dentro del directorio del proyecto y ejecutar el comando `make <comando>`.
+
+### Levantar la aplicación
+
+```bash
+make install
+make up
+```
+
