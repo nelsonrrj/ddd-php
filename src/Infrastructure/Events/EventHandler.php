@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Events;
 
-use App\Infrastructure\Events\EventDispatcher;
-use App\Application\EventHandlers\SendWelcomeEmailHandler;
+use App\Infrastructure\EventHandlers\SendWelcomeEmailHandler;
 use App\Domain\Events\UserRegisteredEvent;
 
 class EventHandler
