@@ -14,7 +14,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-    command: ["php", "-S", "0.0.0.0:8000", "-t", "/var/www/html"]
+    command: ["php", "-S", "0.0.0.0:8000", "-t", "/var/www/html/public"]
   db:
     image: mysql:8.0
     container_name: mysql_db

@@ -14,13 +14,17 @@ class DatabaseTestConnection extends DatabaseConnection
     $testConnectionParams = require __DIR__ . '/../../Config/TestDatabaseConfig.php';
 
     // Llamar al constructor padre con la configuración de prueba
-    parent::__construct(new DatabaseConnectionParams(
-      $testConnectionParams['driver'],
-      $testConnectionParams['host'],
-      $testConnectionParams['port'],
-      $testConnectionParams['dbname'],
-      $testConnectionParams['user'],
-      $testConnectionParams['password'],
-    ), true);
+    parent::__construct(
+      new DatabaseConnectionParams(
+        $testConnectionParams['driver'],
+        $testConnectionParams['host'],
+        $testConnectionParams['port'],
+        $testConnectionParams['dbname'],
+        $testConnectionParams['user'],
+        $testConnectionParams['password'],
+      ),
+      '/var/www/html/src/Infrastructure/Persistence/Entities', // Correct entities path
+      true // isDevMode
+    );
   }
 }

@@ -13,15 +13,15 @@ use Exception;
 
 class DatabaseConnection
 {
-  private DatabaseConnectionParams $connectionParams;
-  private string $entitiesPath;
-  private bool $isDevMode;
+  private readonly DatabaseConnectionParams $connectionParams;
+  private readonly string $entitiesPath;
+  private readonly bool $isDevMode;
   private ?EntityManager $entityManager = null;
 
-  public function __construct(DatabaseConnectionParams $connectionParams, bool $isDevMode = true)
+  public function __construct(DatabaseConnectionParams $connectionParams, string $entitiesPath, bool $isDevMode = true)
   {
     $this->connectionParams = $connectionParams;
-    $this->entitiesPath = __DIR__ . '/Entities';
+    $this->entitiesPath = $entitiesPath;
     $this->isDevMode = $isDevMode ?? true;
   }
 

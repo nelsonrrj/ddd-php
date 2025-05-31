@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Infrastructure\Controllers;
 
 use App\Application\UseCases\RegisterUserUserCase;
 use App\Application\DTO\RegisterRequestDTO;

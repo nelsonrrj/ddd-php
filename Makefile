@@ -2,8 +2,8 @@
 DOCKER_COMPOSE = docker-compose
 PHP = $(DOCKER_COMPOSE) exec app php
 COMPOSER = $(DOCKER_COMPOSE) exec app composer
-MYSQL = $(DOCKER_COMPOSE) exec db mysql -uroot -prootsecret my_database
-MYSQL_TEST = $(DOCKER_COMPOSE) exec db mysql -uroot -prootsecret my_database_test
+MYSQL = $(DOCKER_COMPOSE) exec db mysql -unelsonrrj -pnelsonrrj my_database
+MYSQL_TEST = $(DOCKER_COMPOSE) exec db mysql -unelsonrrj -pnelsonrrj my_database_test
 
 # Main commands
 .PHONY: up down build test test-unit migrate migrate-test db-reset logs logs-db
@@ -11,7 +11,6 @@ MYSQL_TEST = $(DOCKER_COMPOSE) exec db mysql -uroot -prootsecret my_database_tes
 # Start the application
 up:
 	$(DOCKER_COMPOSE) up -d --build
-	$(COMPOSER) install --optimize-autoloader
 
 # Stop and delete containers
 down:
@@ -46,10 +45,11 @@ db-reset:
 
 # Install dependencies, create .env file and run migrations
 install:
-	$(COMPOSER) install --optimize-autoloader
 	$(MAKE) create-env
+	$(MAKE) up
+	$(COMPOSER) install --optimize-autoloader
+	
 	$(MAKE) migrate
-	$(MAKE) migrate-test
 
 # Update autoload
 dump:

@@ -45,7 +45,8 @@ class ContainerBuilder
     $this->builder->addDefinitions(
         array_merge(
             require __DIR__ . '/Definitions/Repositories.php',
-            require __DIR__ . '/Definitions/Infrastructure.php'
+            require __DIR__ . '/Definitions/Infrastructure.php',
+            require __DIR__ . '/Definitions/Controllers.php'
         )
     );
   }
