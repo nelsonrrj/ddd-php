@@ -7,7 +7,7 @@ use DI\Container;
 
 class App
 {
-  private static App $instance;
+  private static ?App $instance = null;
 
   private Container $container;
 

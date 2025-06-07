@@ -1,39 +1,38 @@
 <?php
 
-use App\Infrastructure\Controllers\RegisterUserController;
-use App\Infrastructure\DI\ContainerFactory;
-use App\Infrastructure\Exceptions\InfrastructureException;
+declare(strict_types=1);
 
-try {
-  $container = ContainerFactory::getContainer();
+use App\Infrastructure\Responses\JsonResponse;
+use App\App;
 
-  if ($_SERVER['REQUEST_URI'] === '/users' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+// Load routes from external file
+$routes = require_once __DIR__ . '/routes.php';
 
-    $registerUserController = $container->get(RegisterUserController::class);
+$url = parse_url($_SERVER['REQUEST_URI']);
+$path = $url['path'];
 
-    $input = json_decode(file_get_contents('php://input'), true);
-
-    $response = $registerUserController->register($input);
-
-    http_response_code($response->getStatusCode());
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
-  }
-} catch (DomainException $e) {
-  http_response_code($e->getCode());
-  echo json_encode(['error' => $e->getMessage()]);
-  exit();
-} catch (InfrastructureException $e) {
-  http_response_code(500);
-  echo json_encode(['error' => $e->getMessage()]);
-  exit();
-} catch (Exception $e) {
-  http_response_code(500);
-  echo json_encode(['error' => $e->getMessage()]);
-  exit();
+if (array_key_exists($path, $routes)) {
+  processRoute($routes[$path]);
+} else {
+  JsonResponse::send(statusCode: 404, message: 'Not Found');
 }
 
-http_response_code(404);
-echo json_encode(['error' => 'Not Found']);
-exit();
+function processRoute(array $route): void
+{
+  try {
+    if ($_SERVER['REQUEST_METHOD'] !== $route[2]) {
+      throw new Exception('Method not allowed', 405);
+    }
+    $app = App::getInstance();
+    $controller = $app->getContainer()->get($route[0]);
+    $method = $route[1];
+    $controller->$method(getInput());
+  } catch (Exception $e) {
+    JsonResponse::send(statusCode: $e->getCode(), message: $e->getMessage());
+  }
+}
+
+function getInput(): ?array
+{
+  return json_decode(file_get_contents('php://input'), true);
+}

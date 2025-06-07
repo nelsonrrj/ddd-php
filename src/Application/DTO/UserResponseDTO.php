@@ -12,9 +12,4 @@ class UserResponseDTO implements ResponseDTO
   {
     return $this->user->jsonSerialize();
   }
-
-  public function getStatusCode(): int
-  {
-    return 201;
-  }
 }

@@ -4,7 +4,7 @@ namespace App\Infrastructure\Controllers;
 
 use App\Application\UseCases\RegisterUserUserCase;
 use App\Application\DTO\RegisterRequestDTO;
-use App\Application\DTO\ResponseDTO;
+use App\Infrastructure\Responses\JsonResponse;
 
 class RegisterUserController
 {
@@ -12,8 +12,10 @@ class RegisterUserController
     private RegisterUserUserCase $registerUserUserCase,
   ) {}
 
-  public function register(array $data): ResponseDTO
+  public function register(array $data)
   {
-    return $this->registerUserUserCase->execute(RegisterRequestDTO::fromArray($data));
+    $response = $this->registerUserUserCase->execute(RegisterRequestDTO::fromArray($data));
+
+    return JsonResponse::send($response, 201, 'User created successfully');
   }
 }
