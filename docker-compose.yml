@@ -8,17 +8,14 @@ services:
       - ${APP_PORT}:8000
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      DB_HOST: db
-      DB_PORT: ${DB_PORT}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db  # Override DB_HOST for Docker networking
     command: ["php", "-S", "0.0.0.0:8000", "-t", "/var/www/html/public"]
   db:
     image: mysql:8.0
     container_name: mysql_db
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
