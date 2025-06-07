@@ -26,14 +26,23 @@ class UserEntityTest extends TestCase
     $this->createdAt = new \DateTime('2023-01-01 12:00:00');
   }
 
+  /**
+   * Tests that a UserEntity can be created with all parameters including ID and createdAt.
+   * 
+   * This test verifies that:
+   * - A UserEntity can be instantiated with all required value objects
+   * - All properties are properly assigned and accessible
+   * - The entity maintains immutability by returning the same object references
+   * - Both ID and createdAt can be explicitly set during construction
+   */
   public function testUserEntityCanBeCreated(): void
   {
     $user = new UserEntity(
-      $this->userId,
-      $this->userEmail,
-      $this->userName,
-      $this->userPassword,
-      $this->createdAt
+      id: $this->userId,
+      email: $this->userEmail,
+      name: $this->userName,
+      password: $this->userPassword,
+      createdAt: $this->createdAt
     );
 
     $this->assertSame($this->userId, $user->id);
@@ -43,14 +52,23 @@ class UserEntityTest extends TestCase
     $this->assertSame($this->createdAt, $user->createdAt);
   }
 
+  /**
+   * Tests that a UserEntity can be created without an ID (for new entities).
+   * 
+   * This test verifies that:
+   * - A UserEntity can be created with a null ID (typical for new entities before persistence)
+   * - All other required properties are properly set
+   * - The entity handles the null ID case gracefully
+   * - This supports the common pattern of creating entities before database persistence
+   */
   public function testUserEntityCanBeCreatedWithoutId(): void
   {
     $user = new UserEntity(
-      null,
-      $this->userEmail,
-      $this->userName,
-      $this->userPassword,
-      $this->createdAt
+      id: null,
+      email: $this->userEmail,
+      name: $this->userName,
+      password: $this->userPassword,
+      createdAt: $this->createdAt
     );
 
     $this->assertNull($user->id);
@@ -60,15 +78,24 @@ class UserEntityTest extends TestCase
     $this->assertSame($this->createdAt, $user->createdAt);
   }
 
+  /**
+   * Tests that a UserEntity automatically sets createdAt to current time when not provided.
+   * 
+   * This test verifies that:
+   * - When createdAt is not provided, the entity sets it to the current timestamp
+   * - The automatically set createdAt falls within the expected time range
+   * - The entity provides sensible defaults for timestamp fields
+   * - The creation time is captured accurately during entity instantiation
+   */
   public function testUserEntityCanBeCreatedWithDefaultCreatedAt(): void
   {
     $beforeCreation = new \DateTime();
 
     $user = new UserEntity(
-      $this->userId,
-      $this->userEmail,
-      $this->userName,
-      $this->userPassword
+      id: $this->userId,
+      email: $this->userEmail,
+      name: $this->userName,
+      password: $this->userPassword
     );
 
     $afterCreation = new \DateTime();
@@ -82,14 +109,24 @@ class UserEntityTest extends TestCase
     $this->assertLessThanOrEqual($afterCreation, $user->createdAt);
   }
 
+  /**
+   * Tests that UserEntity can be properly serialized to JSON with security considerations.
+   * 
+   * This test verifies that:
+   * - The entity can be JSON serialized for API responses
+   * - All public fields (id, email, name, createdAt) are included in serialization
+   * - Sensitive data (password) is excluded from JSON serialization for security
+   * - The serialized data maintains proper format and data types
+   * - The JsonSerializable interface is properly implemented
+   */
   public function testUserEntityJsonSerialization(): void
   {
     $user = new UserEntity(
-      $this->userId,
-      $this->userEmail,
-      $this->userName,
-      $this->userPassword,
-      $this->createdAt
+      id: $this->userId,
+      email: $this->userEmail,
+      name: $this->userName,
+      password: $this->userPassword,
+      createdAt: $this->createdAt
     );
 
     $serialized = json_encode($user);

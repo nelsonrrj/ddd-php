@@ -7,7 +7,7 @@ use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\UserEmail;
 use App\Domain\ValueObjects\UserName;
 use App\Domain\ValueObjects\UserPassword;
-use App\Infrastructure\Repositories\DoctrineUserRepository;
+use App\Infrastructure\Persistence\Repositories\DoctrineUserRepository;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,7 +50,7 @@ class DoctrineUserEntity
       id: new UserId($this->id),
       email: new UserEmail($this->email),
       name: new UserName($this->name),
-      password: new UserPassword($this->password),
+      password: new UserPassword($this->password, true),
       createdAt: $this->createdAt,
     );
   }

@@ -10,9 +10,12 @@ class UserPassword implements ValueObject
 {
   public function __construct(
     private string $password,
+    private bool $isHashed = false
   ) {
-    $this->validatePassword($password);
-    $this->password = $this->hashPassword($password);
+    if (!$this->isHashed) {
+      $this->validatePassword($password);
+      $this->password = $this->hashPassword($password);
+    }
   }
 
   private function validatePassword(string $password): void
@@ -37,14 +40,14 @@ class UserPassword implements ValueObject
     }
   }
 
-  public function hashPassword(string $password): string
+  private function hashPassword(string $plainPassword): string
   {
-    return password_hash($password, PASSWORD_DEFAULT);
+    return password_hash($plainPassword, PASSWORD_DEFAULT);
   }
 
-  public function comparePassword(string $password): bool
+  public function comparePassword(string $plainPassword): bool
   {
-    return password_verify($password, $this->password);
+    return password_verify($plainPassword, $this->password);
   }
 
   public function jsonSerialize(): string

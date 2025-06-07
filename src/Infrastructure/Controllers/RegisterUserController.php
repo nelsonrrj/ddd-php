@@ -12,10 +12,14 @@ class RegisterUserController
     private RegisterUserUserCase $registerUserUserCase,
   ) {}
 
-  public function register(array $data)
+  public function register(array $data): JsonResponse
   {
     $response = $this->registerUserUserCase->execute(RegisterRequestDTO::fromArray($data));
 
-    return JsonResponse::send($response, 201, 'User created successfully');
+    return JsonResponse::fromArray([
+      'data' => $response,
+      'message' => 'User created successfully',
+      'statusCode' => 201
+    ]);
   }
 }

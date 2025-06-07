@@ -26,6 +26,16 @@ class RegisterUserUserCaseTest extends TestCase
     $this->strongPassword = new UserPassword('1234AD.qwed');
   }
 
+  /**
+   * Tests the successful registration of a new user through the use case.
+   * 
+   * This test verifies that:
+   * - A new user can be registered with valid data using RegisterRequestDTO
+   * - The use case returns a proper response DTO with user information
+   * - The response contains all required fields (id, name, email, createdAt)
+   * - The returned data matches the input data
+   * - The user registration process works end-to-end at the application layer
+   */
   public function testRegisterNewUser(): void
   {
     $requestDTO = new RegisterRequestDTO(
@@ -46,6 +56,15 @@ class RegisterUserUserCaseTest extends TestCase
     $this->assertArrayHasKey('createdAt', $arrayResponse);
   }
 
+  /**
+   * Tests that attempting to register a user with an existing email throws an exception.
+   * 
+   * This test verifies that:
+   * - An existing user can be saved to the mock repository
+   * - Attempting to register another user with the same email throws UserAlreadyExistsException
+   * - The use case properly validates for duplicate emails before creating new users
+   * - The business rule preventing duplicate registrations is enforced at the application layer
+   */
   public function testRegisterExistingUserThrowsException(): void
   {
     $email = 'existing@example.com';
