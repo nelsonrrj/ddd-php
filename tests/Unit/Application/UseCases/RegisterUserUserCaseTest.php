@@ -48,7 +48,7 @@ class RegisterUserUserCaseTest extends TestCase
         $requestDTO = new RegisterRequestDTO(
             name: 'Test User',
             email: 'test@example.com',
-            password: $this->strongPassword,
+            password: (string) $this->strongPassword,
         );
 
         $responseDTO = $this->registerUserUseCase->execute($requestDTO);
@@ -88,7 +88,7 @@ class RegisterUserUserCaseTest extends TestCase
         $requestDTO = new RegisterRequestDTO(
             name: 'Another User',
             email: $email,
-            password: $this->strongPassword,
+            password: (string) $this->strongPassword,
         );
 
         $this->expectException(UserAlreadyExistsException::class);
