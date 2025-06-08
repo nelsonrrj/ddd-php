@@ -14,7 +14,8 @@ $path = $url['path'];
 if (array_key_exists($path, $routes)) {
   processRoute($routes[$path]);
 } else {
-  JsonResponse::send(statusCode: 404, message: 'Not Found');
+  $response = new JsonResponse(null, 'Not Found', 404);
+  $response->send();
 }
 
 function processRoute(array $route): void
@@ -28,7 +29,8 @@ function processRoute(array $route): void
     $method = $route[1];
     $controller->$method(getInput());
   } catch (Exception $e) {
-    JsonResponse::send(statusCode: $e->getCode(), message: $e->getMessage());
+    $response = new JsonResponse(null, $e->getMessage(), $e->getCode());
+    $response->send();
   }
 }
 
