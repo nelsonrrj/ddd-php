@@ -1,7 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\DTO;
 
-use JsonSerializable;
-
-interface ResponseDTO extends JsonSerializable {}
+interface ResponseDTO extends \JsonSerializable {}

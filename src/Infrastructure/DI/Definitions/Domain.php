@@ -10,5 +10,5 @@ use App\Infrastructure\Persistence\Repositories\DoctrineUserRepository;
 use function DI\autowire;
 
 return [
-  UserRepository::class => autowire(DoctrineUserRepository::class),
+    UserRepository::class => autowire(DoctrineUserRepository::class),
 ];

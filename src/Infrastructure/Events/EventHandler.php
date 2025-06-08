@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Events;
 
-use App\Infrastructure\EventHandlers\SendWelcomeEmailHandler;
 use App\Domain\Events\UserRegisteredEvent;
+use App\Infrastructure\EventHandlers\SendWelcomeEmailHandler;
 
 class EventHandler
 {
-  public function __construct(
-    private EventDispatcher $eventDispatcher
-  ) {}
+    public function __construct(
+        private EventDispatcher $eventDispatcher,
+    ) {}
 
-  public function setup(): void
-  {
-    $this->eventDispatcher->addListener(
-      UserRegisteredEvent::class,
-      new SendWelcomeEmailHandler()
-    );
-  }
+    public function setup(): void
+    {
+        $this->eventDispatcher->addListener(
+            UserRegisteredEvent::class,
+            new SendWelcomeEmailHandler(),
+        );
+    }
 }

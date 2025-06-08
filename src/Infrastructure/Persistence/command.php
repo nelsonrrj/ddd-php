@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use App\Infrastructure\DI\ContainerFactory;
@@ -12,7 +14,7 @@ $dbConnection = $container->get(DatabaseConnection::class);
 $entityManager = $dbConnection->getEntityManager();
 
 ConsoleRunner::run(
-  new SingleManagerProvider($entityManager)
+    new SingleManagerProvider($entityManager),
 );
 
 // php src/Infrastructure/Persistence/command.php orm:schema-tool:create

@@ -8,10 +8,10 @@ use App\Domain\Events\UserRegisteredEvent;
 
 class SendWelcomeEmailHandler
 {
-  public function __invoke(UserRegisteredEvent $event): void
-  {
-    $user = $event->getUser();
+    public function __invoke(UserRegisteredEvent $event): void
+    {
+        $user = $event->getUser();
 
-    // TODO: Implement the logic to send the welcome email
-  }
+        // TODO: Implement the logic to send the welcome email
+    }
 }

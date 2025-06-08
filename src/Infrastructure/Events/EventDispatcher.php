@@ -9,25 +9,25 @@ use App\Domain\Events\EventDispatcher as DomainEventDispatcher;
 
 class EventDispatcher implements DomainEventDispatcher
 {
-  private array $listeners = [];
+    private array $listeners = [];
 
-  public function addListener(string $eventClass, callable $listener): void
-  {
-    if (!isset($this->listeners[$eventClass])) {
-      $this->listeners[$eventClass] = [];
+    public function addListener(string $eventClass, callable $listener): void
+    {
+        if (!isset($this->listeners[$eventClass])) {
+            $this->listeners[$eventClass] = [];
+        }
+
+        $this->listeners[$eventClass][] = $listener;
     }
 
-    $this->listeners[$eventClass][] = $listener;
-  }
+    public function dispatch(DomainEvent $event): void
+    {
+        $eventClass = get_class($event);
 
-  public function dispatch(DomainEvent $event): void
-  {
-    $eventClass = get_class($event);
-
-    if (isset($this->listeners[$eventClass])) {
-      foreach ($this->listeners[$eventClass] as $listener) {
-        call_user_func($listener, $event);
-      }
+        if (isset($this->listeners[$eventClass])) {
+            foreach ($this->listeners[$eventClass] as $listener) {
+                call_user_func($listener, $event);
+            }
+        }
     }
-  }
 }
