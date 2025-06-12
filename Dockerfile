@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
   zip \
   unzip \
   git \
+  bash \
   && docker-php-ext-install pdo pdo_mysql
 
 # Composer install
