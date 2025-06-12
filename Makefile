@@ -1,21 +1,20 @@
-# Variables
-DOCKER_COMPOSE = docker-compose
-
 # Determinar qué archivo .env usar (por defecto .env)
 ENV_FILE ?= .env
+NO_ENV_COMMANDS := create-env setup install
+ENV_REQUIRED := $(if $(filter-out $(NO_ENV_COMMANDS),$(MAKECMDGOALS)),true)
 
-# Cargar variables del archivo de entorno
+# Cargar variables del archivo de entorno. Fallar si .env no existe y es requerido.
 ifneq (,$(wildcard $(ENV_FILE)))
     include $(ENV_FILE)
     export
+else
+    ifeq ($(ENV_REQUIRED),true)
+        $(error El archivo .env no se encontró. Por favor, ejecuta 'make create-env' o 'make setup' para empezar.)
+    endif
 endif
 
-# Variables con valores por defecto
-DB_HOST ?= db
-DB_PORT ?= 3306
-DB_DATABASE ?= my_database
-DB_USERNAME ?= nelsonrrj
-DB_PASSWORD ?= nelsonrrj
+# Variables
+DOCKER_COMPOSE = docker-compose
 
 # Add a new variable for root MySQL connection
 MYSQL_ROOT = $(DOCKER_COMPOSE) exec $(DB_HOST) mysql -uroot -p$(DB_PASSWORD)
@@ -87,7 +86,7 @@ console: ## Docker: Access the application container shell
 # =============================================================================
 # DEVELOPMENT COMMANDS
 # =============================================================================
-.PHONY: install dev setup composer-install composer-update dump
+.PHONY: install dev setup composer-install composer-update dump create-env
 
 install: setup ## Development: Full installation (first time setup)
 
@@ -99,18 +98,7 @@ setup: ## Development: Setup project (create env, start containers, install depe
 	$(MAKE) migrate
 	@echo "$(GREEN)Setup complete!$(NC)"
 
-dev: ## Development: Start development environment
-	@echo "$(GREEN)Starting development environment...$(NC)"
-	$(DOCKER_COMPOSE) up -d --build
-
-dev-migrate: ## Development: Run development migrations
-	@echo "$(GREEN)Running development migrations...$(NC)"
-	$(PHP) src/Infrastructure/Persistence/command.php orm:schema-tool:create
-
-dev-reset: ## Development: Reset development database
-	@echo "$(RED)Resetting development database...$(NC)"
-	$(MYSQL) -e "DROP DATABASE IF EXISTS $(DB_DATABASE); CREATE DATABASE $(DB_DATABASE);"
-	$(MAKE) dev-migrate
+dev: up ## Development: Start development environment
 
 composer-install: ## Development: Install composer dependencies
 	@echo "$(GREEN)Installing dependencies...$(NC)"
@@ -173,8 +161,9 @@ db-restore: ## Database: Restore database from backup (requires BACKUP_FILE vari
 .PHONY: test-all test-unit test-integration
 
 test-all: ## Testing: Run all tests
-	@echo "$(GREEN)Running all tests with testing environment...$(NC)"
+	@echo "$(GREEN)Running all tests...$(NC)"
 	$(PHP) vendor/bin/phpunit
+	@echo "$(GREEN)All tests completed!$(NC)"
 
 test-unit: ## Testing: Run unit tests
 	@echo "$(GREEN)Running unit tests...$(NC)"
@@ -183,6 +172,7 @@ test-unit: ## Testing: Run unit tests
 test-integration: ## Testing: Run integration tests
 	@echo "$(GREEN)Running integration tests...$(NC)"
 	$(PHP) vendor/bin/phpunit tests/Integration
+	@echo "$(GREEN)Integration tests completed!$(NC)"\n"
 
 # =============================================================================
 # CODE QUALITY COMMANDS
@@ -244,8 +234,8 @@ wait-for-db: ## Utility: Waits for the database to be ready to accept connection
 	@n=0; \
 	while ! $(DOCKER_COMPOSE) exec -T $(DB_HOST) mysqladmin ping -h"localhost" -u"root" -p"$(DB_PASSWORD)" --silent; do \
 		n=$$(($$n+1)); \
-		if [ $$n -gt 30 ]; then \
-			echo "$(RED)Database connection timed out after 60 seconds.$(NC)"; \
+		if [ $$n -gt 10 ]; then \
+			echo "$(RED)Database connection timed out after 20 seconds.$(NC)"; \
 			exit 1; \
 		fi; \
 		echo "Database is unavailable - sleeping for 2s (attempt $$n)..."; \
