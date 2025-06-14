@@ -7,6 +7,8 @@ namespace App\Application\UseCases;
 use App\Application\DTO\RegisterRequestDTO;
 use App\Application\DTO\UserResponseDTO;
 use App\Domain\Entities\UserEntity;
+use App\Domain\Events\EventDispatcher;
+use App\Domain\Events\UserRegisteredEvent;
 use App\Domain\Exceptions\UserAlreadyExistsException;
 use App\Domain\Repositories\UserRepository;
 use App\Domain\ValueObjects\UserEmail;
@@ -17,6 +19,7 @@ class RegisterUserUserCase
 {
     public function __construct(
         private UserRepository $userRepository,
+        private EventDispatcher $eventDispatcher,
     ) {}
 
     public function execute(RegisterRequestDTO $request): UserResponseDTO
@@ -34,6 +37,8 @@ class RegisterUserUserCase
         }
 
         $newUser = $this->userRepository->save($user);
+
+        $this->eventDispatcher->dispatch(new UserRegisteredEvent($newUser));
 
         return new UserResponseDTO($newUser);
     }

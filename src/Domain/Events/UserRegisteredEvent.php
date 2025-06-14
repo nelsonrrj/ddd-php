@@ -9,20 +9,25 @@ use App\Domain\Entities\UserEntity;
 class UserRegisteredEvent implements DomainEvent
 {
     private \DateTimeImmutable $occurredOn;
-
+    
     public function __construct(
-        private UserEntity $user,
+        private UserEntity $user
     ) {
         $this->occurredOn = new \DateTimeImmutable();
     }
-
+    
     public function occurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;
     }
-
-    public function getUser(): UserEntity
+    
+    public function eventData(): array
     {
-        return $this->user;
+        return [
+            'userId' => (string) $this->user->id,
+            'userEmail' => (string) $this->user->email,
+            'userName' => (string) $this->user->name,
+            'registeredAt' => $this->user->createdAt->format('Y-m-d H:i:s'),
+        ];
     }
-}
+} 
